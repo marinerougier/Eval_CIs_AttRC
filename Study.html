@@ -209,8 +209,7 @@ var judg_link = [
       var html = "";
       html += "<h1>Etude sur l'évaluation et la reconnaissance de visages</h1>";
       html += "<p class='justify'>Cette étude est composée de deux parties. </br>";
-      html += "La première partie porte sur l'évaluation de visages et la deuxième sur la reconnaissance de visages. </br></br>";
-      html += "<p></br>Appuyez sur <span class='light-keys'><kbd>espace</kbd></span> pour commencer</p>";
+      html += "La première partie porte sur l'évaluation de visages et la deuxième sur la reconnaissance de visages. </br></br></p>";
       return html;
     },
   };
@@ -230,8 +229,7 @@ var judg_link = [
       html += "La première réponse qui vient à l'esprit est généralement la meilleure.</br></br>";
       html += "Avant la tâche d'évaluation, <b>nous allons brièvement vous présenter les deux visages</b> ";
       html += "afin que vous puissiez mieux percevoir les similitudes et les différences entre eux. </br> ";
-      html += "Les visages seront automatiquement présentés durant moins de 2 secondes chacun. Veuillez rester concentré.</br></br>";
-      html += "<p></br>Appuyez sur <span class='light-keys'><kbd>espace</kbd></span> pour commencer</p>";
+      html += "Les visages seront automatiquement présentés durant moins de 2 secondes chacun. Veuillez rester concentré.</br></br></p>";
       return html;
     },
   };
@@ -257,8 +255,7 @@ var judg_link = [
       var html = "";
       html += "<h1>Evaluation et reconnaissance de visages</h1>";
       html += "<p class='justify'>Vous allez maintenant évaluer les deux visages.";
-      html += " Une fois de plus, merci de répondre <b> aussi honnêtement et spontanément que possible. </b></br></br>";
-      html += "<p></br>Appuyez sur <span class='light-keys'><kbd>espace</kbd></span> pour commencer</p>";
+      html += " Une fois de plus, merci de répondre <b> aussi honnêtement et spontanément que possible. </b></br></br></p>";
       return html;
     },
   };
@@ -306,11 +303,15 @@ var End_part1 = {
     type: "html-button-response",
     post_trial_gap: 300,
     choices: ['continuer'],
+    on_load: function() {
+          window.scrollTo(0, 0);
+          $(".jspsych-content").css("margin-top", "200px");
+          $(".jspsych-content").css("max-width", "90%");
+        },
     stimulus: function() {
       var html = "";
       html += "<h1>Tâche 1: Evaluation de visages</h1>";
-      html += "<p class='justify'>La première tâche est terminée. Vous allez maintenant passer à la deuxième tâche. </br></br>";
-      html += "<p></br>Appuyez sur <span class='light-keys'><kbd>espace</kbd></span> pour commencer</p>";
+      html += "<p class='justify'>La première tâche est terminée. Vous allez maintenant passer à la deuxième tâche. </br></br></p>";
       return html;
     },
   };
