@@ -45,7 +45,7 @@ DESCRIPTION ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   }  
   .jspsych-content-wrapper {
     width: 900px;
-    height: 1500px;
+    height: 10000px;
   }
 </style>
 </head>
@@ -148,8 +148,8 @@ var judg_link = [
   /* FULL SCREEN MODE */
   var activeFullscreen = {
     message: "",
-    button_label: "To start the study, please switch to fullscreen",
-    type: 'fullscreen',
+    button_label: "Pour commencer l'étude, merci de passer en mode 'plein écran'",
+    type: 'Plein écran',
     fullscreen_mode: true,
     delay_after: 200,
   };
@@ -166,7 +166,7 @@ var judg_link = [
         return true;
       }
       else {
-        alert("If you wish to participate, you must check all the boxes.");
+        alert("Si vous souhaitez participer, vous devez cocher toutes les cases.");
         return false;
       }
       return false;
