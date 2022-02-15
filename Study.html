@@ -34,6 +34,15 @@ DESCRIPTION ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     margin: 0px;
     padding: 0px;
   }
+ .rcimg-12 {
+    cursor: pointer;
+  }
+  .rcimg-12 {
+    margin: 10px;
+  }
+  .rcimg-12:hover {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  }  
   .jspsych-content-wrapper {
     width: 900px;
     height: 1500px;
@@ -45,6 +54,7 @@ DESCRIPTION ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   /* Parameters */
   var n = 4; // number of CIs randomly sample for each cell
   var githubCIs = 'stimuli/'; // github CIs path
+  var numOfPairs = 150 * 6; // Total number of pair images images (inv & ori)
 
   /* Initial variables */
   var timeline = [];
@@ -57,24 +67,81 @@ DESCRIPTION ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
       return flat.concat(Array.isArray(toFlatten) ? flatten(toFlatten) : toFlatten);
     }, []);
   };
+  
+  // Return image link
+   var imgLink = function (imgNum, oriInv) {
+
+        if (oriInv == "inv") {
+            return 'https://marinerougier.github.io/CIs_MgFr_Inv/faceInv' + imgNum + '.png?raw=1'
+        } else {
+            return 'https://marinerougier.github.io/CIs_MgFr_Ori/faceOri' + imgNum + '.png?raw=1'
+        };
+    };
+
+
 
   // CIs
-var imgLink = [
+var judg_link = [
   "ci_avg_app.jpeg", 
   "ci_avg_av.jpeg"
 ];
 
   // Add relative path to CIs
-  imgLink = imgLink.map(function(e) {return githubCIs + e});
+  judg_link = judg_link.map(function(e) {return githubCIs + e});
 
   // CIs stims
-  CIsStims = imgLink.map(function(e) {return {imgHtml: "<img class='imgJudge' src='" + e + "'>"}});
+  CIsStims = judg_link.map(function(e) {return {imgHtml: "<img class='imgJudge' src='" + e + "'>"}});
  // randomize order
   CIsStims = _.shuffle(CIsStims);
 
   // Preload images
-  preloadimages.push(imgLink);
+  preloadimages.push(judg_link);
   preloadimages = flatten(preloadimages);
+  var preloadcis = [];
+
+ /* Generate RC trials */
+
+    var imgsRC = $.map($(Array(numOfPairs)), function (val, i) { return i + 1; }); // generate numerical sequence
+
+    imgsRC.map(function (e) {
+        preloadcis.push(imgLink(e, 'ori'));
+        preloadcis.push(imgLink(e, 'inv'));
+    });
+
+
+    var genFacesPerSlide = function (numOfFacesPerTrial, imgs) {
+        numOfFacesPerTrial = numOfFacesPerTrial / 2;
+        var chunkedArray = [];
+        var i, j, trialImgs, chunk = numOfFacesPerTrial;
+
+        for (i = 0, j = imgs.length; i < j; i += chunk) {
+
+            trialImgs = imgs.slice(i, i + chunk);
+
+            var tempOri = [];
+            var tempInv = [];
+
+            trialImgs.map(function (e) {
+                tempOri.push(imgLink(e, 'ori'));
+                tempInv.push(imgLink(e, 'inv'));
+            });
+
+
+            trialImgs = _.flattenDeep([tempOri, tempInv]);
+
+            // trialImgs = _.shuffle(trialImgs); // randomize order in slide
+
+            chunkedArray.push({
+                trialImgs
+            });
+        }
+        return chunkedArray;
+    };
+
+
+    var RCstim = genFacesPerSlide(12, imgsRC); // RC fast-12: 250 trials (6 ori + 6 anti = 12  faces per trial)
+
+
 
   // EXPERIMENT --------------------------------------------------------------------------------------------------------
 
@@ -132,14 +199,29 @@ var imgLink = [
   };
 
   /* PREVIEW CIS INSTRUCTIONS */
+
+  var instr_gene = {
+    type: "html-keyboard-response",
+    post_trial_gap: 300,
+    choices: [32],
+    stimulus: function() {
+      var html = "";
+      html += "<h1>Etude sur l'évaluation et la reconnaissance de visages</h1>";
+      html += "<p class='justify'>Cette étude est composée de deux parties. </br>";
+      html += "La première partie porte sur l'évaluation de visages et la deuxième sur la reconnaissance de visages. </br></br>";
+      html += "<p></br>Appuyez sur <span class='light-keys'><kbd>espace</kbd></span> pour commencer</p>";
+      return html;
+    },
+  };
+
   var previewCIinst = {
     type: "html-keyboard-response",
     post_trial_gap: 300,
     choices: [32],
     stimulus: function() {
       var html = "";
-      html += "<h1>Evaluation de visages</h1>";
-      html += "<p class='justify'>Dans cette étude, vous devrez <b>évaluer 2 visages</b>. Vous devrez indiquer, "
+      html += "<h1>Tâche 1 : Evaluation de visages </h1>";
+      html += "<p class='justify'>Dans cette première partie, vous devrez <b>évaluer 2 visages</b>. Vous devrez indiquer, "
       html += "pour chacun de ces visages, dans quelle mesure il semble <b>agressif, digne de confiance</b> and ";
       html += "<b>criminel</b> (de 0 = pas du tout to 100 = totalement). </br> ";
       html += "Comme vous le verrez, ces visages ont été <b>floutés</b> afin de rendre la tâche plus difficile. </br></br>";
@@ -172,7 +254,7 @@ var imgLink = [
     choices: [32],
     stimulus: function() {
       var html = "";
-      html += "<h1>valuation de visages</h1>";
+      html += "<h1>Evaluation et reconnaissance de visages</h1>";
       html += "<p class='justify'>Vous allez maintenant évaluer les deux visages.";
       html += " Une fois de plus, merci de répondre <b> aussi honnêtement et spontanément que possible. </b></br></br>";
       html += "<p></br>Appuyez sur <span class='light-keys'><kbd>espace</kbd></span> pour commencer</p>";
@@ -218,6 +300,112 @@ var imgLink = [
     };
     judgments.push(likert_trial);
   });
+
+var End_part1 = {
+    type: "html-keyboard-response",
+    post_trial_gap: 300,
+    choices: [32],
+    stimulus: function() {
+      var html = "";
+      html += "<h1>Tâche 1: Evaluation de visages</h1>";
+      html += "<p class='justify'>La première tâche est terminée. Vous allez maintenant passer à la deuxième tâche. </br></br>";
+      html += "<p></br>Appuyez sur <span class='light-keys'><kbd>espace</kbd></span> pour commencer</p>";
+      return html;
+    },
+  };
+
+
+/* RC instructions */
+    var RCinst1 = {
+        type: "html-button-response",
+        post_trial_gap: 300,
+        choices: ['continuer'],
+        stimulus: function () {
+            var html = "";
+            html += "<h1>Tâche 2: Tâche de reconnaissance de visages</h1>";
+            html += "<p class = 'justify'> Dans cette tâche, nous allons vous présenter une série de visages similaires à l'exemple présenté ci-dessous. ";
+            html += "A chaque essai, nous vous présenterons 12 visages. ";
+            html += "Notez que ces visages ont été délibérément floutés pour des raisons d'anonymat, ce qui les rendra similaires entre eux. ";
+            html += "Cependant, ces visages sont bel et bien différents les uns des autres.</p>";
+            html += "<img width='200' style='padding: 0px' src='" + imgLink(474, 'ori') + "'>";
+            return html;
+        },
+    };
+
+    var RCinst2 = {
+        type: "html-button-response",
+        post_trial_gap: 300,
+        choices: ['continuer'],
+        stimulus: function () {
+            var html = "";
+            html += "<h1>Tâche 2: Tâche de reconnaissance de visages</h1>";
+            html += "<p class = 'justify'>A chaque essai, votre tâche sera de choisir, parmi les 12 visages, celui qui ressemble le plus à ";
+            html += "<b>un terroriste susceptible de perpétrer des attentats en France, autrement dit le visage qui vous semble le plus typiquement terroriste. </b><br>";
+            html += "<p class = 'justify'>Merci d'utiliser votre souris d'ordinateur pour sélectionner un visage.</p>";
+            html += "<img width='200' style='padding: 0px' src='" + imgLink(474, 'ori') + "'>";
+            return html;
+        },
+    };
+
+    var RCinst3 = {
+        type: "html-button-response",
+        post_trial_gap: 300,
+        choices: ['commencer'],
+        stimulus: function () {
+            var html = "";
+            html += "<h1>Tâche 2: Tâche de reconnaissance de visages</h1>";
+            html += "<p class = 'justify'>Avant de commencer, merci de noter que : </br></br>";
+            html += "<b>Il n'y a pas de bonne ou de mauvaise réponse !</b> ";
+            html += "Vous devez juste faire un choix aussi <b>intuitivement</b> que possible. ";
+            html += "A chaque essai, les participants prennent en moyenne <b>3 secondes</b> ";
+            html += "pour sélectionner un visage. Merci <b>d'essayer de maintenir un temps de réponse similaire</b>.</br></br>";
+            html += "Dans cette tâche, vous devrez effectuer 150 essais.</p>";
+            return html;
+        },
+    };
+
+   /* RC */
+
+    var i = 1;
+    var RC = {
+        timeline_variables: RCstim,
+        randomize_order: true,
+        //sample: {
+        //    type: 'custom',
+        //    fn: function (t) { return [1, 2, 3] }
+        //},
+        data: {
+            task: 'RC',
+        },
+        timeline: [{
+            type: 'html-mouse-response',
+            stimulus: function () {
+                html = "";
+                html += "<p>Veuillez sélectionner le visage qui vous semble le plus <b>terroriste</b> </br></br>";
+                jsPsych.timelineVariable('trialImgs', true).map(function (e) {
+                    html += "<img class='rcimg-12' src='" + e + "'>";
+                });
+                html += "</br> Essai: " + i + "/150</br>";
+                i += 1;
+                return html;
+            },
+        }]
+    };
+
+    var RCend = {
+        type: "html-button-response",
+        post_trial_gap: 300,
+        choices: ['continuer'],
+        stimulus: function () {
+            var html = "";
+            html += "<p class = 'justify'>La tâche de reconnaissance de visages (Tâche 2) est terminée. Vous allez maintenant répondre à quelques questions.</br></p>";
+            return html;
+        },
+    };
+
+
+
+
 
   /* AGE */
   var age = {
@@ -310,6 +498,8 @@ var imgLink = [
     fullscreen_mode: false
   };
 
+  preloadcis = _.flattenDeep(preloadcis);
+
   /* DEBRIEF */
   var debrief = [];
   debrief += "<h1>Fin de l'étude</h1>";
@@ -323,10 +513,16 @@ var imgLink = [
   timeline.push(consent);
   timeline.push(Quit_expe);
   timeline.push(activeFullscreen);
+  timeline.push(instr_gene);
   timeline.push(previewCIinst);
   timeline.push(previewCI);
   timeline.push(jugmentInst);
   timeline.push(judgments);
+  timeline.push(RCinst1);
+  timeline.push(RCinst2);
+  timeline.push(RCinst3);
+  timeline.push(RC);
+  timeline.push(RCend);
   timeline.push(age);
   timeline.push(gender);
   timeline.push(language);
@@ -340,6 +536,7 @@ var imgLink = [
   jsPsych.init({
     timeline: timeline,
     preload_images: preloadimages,
+    preloadcis: preloadcis,
     max_load_time: 500*1000,
     exclusions: {
       min_width: 700,
