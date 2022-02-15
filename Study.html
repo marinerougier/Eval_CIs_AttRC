@@ -564,13 +564,26 @@ var End_part1 = {
       });
 
       var subdata = data.filter({trial_type: 'survey-likert'}).csv();
+
+      var dataRC = jsPsych.data.get().filterCustom(function (x) {
+                return x.task == "RC"
+            }).csv();
+
       //jsPsych.data.displayData();
 
       /* Send data to Firebase and redirect to Qualtrics */
-      database.ref("Eval_Cis_AAT_2/" + id + "/").update({subdata}).then(function() { 
+      database
+         .ref("Eval_Cis_Att_Mg_RC/" + id + "/")
+         .update({subdata})
+         .then(function() { 
+      database
+        .ref("Eval_Cis_Att_Mg_RC/" + id + "/")
+        .update({ dataRC })
+        .then(function () {
         console.log("data sent!");
         $("#jspsych-content").html(debrief);
         //window.location = qlink; // redirect to qualtrics
+        });
       });
     }
   });
