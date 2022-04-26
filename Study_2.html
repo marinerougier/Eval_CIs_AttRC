@@ -404,7 +404,7 @@ var End_part1 = {
     var two_terrorist = {
         type: "html-button-response",
         post_trial_gap: 300,
-        choices: ["<img class='imgJudge' src='" + judg_link[0] + "'>", "<img class='imgJudge' src='" + judg_link[1] + "'>"],
+        choices: ["<img class='imgJudge' src='" + ci_avg_Att.jpeg + "'>", "<img class='imgJudge' src='" + ci_avg_JO.jpeg + "'>"],
         stimulus: function () {
             var html = "";
             html += "<p class = 'justify'> A votre avis, laquelle de ces deux personnes est un terroriste ? (cliquez directement sur l'image)</p>";
@@ -412,7 +412,7 @@ var End_part1 = {
         },
         on_finish: function (data) {
             jsPsych.data.addProperties({
-                choice_terrorist: JSON.parse(data.responses)["Q0"],
+                choice_terrorist: JSON.parse(data.responses),
             });
         },
     };
