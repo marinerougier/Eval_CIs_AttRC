@@ -412,7 +412,7 @@ var End_part1 = {
         },
         on_finish: function (data) {
             jsPsych.data.addProperties({
-                choice_terrorist: JSON.parse(data.responses).["Q0"],
+                choice_terrorist: JSON.parse(data.responses)["Q0"],
             });
         },
     };
