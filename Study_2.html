@@ -89,6 +89,8 @@ var judg_link = [
 
   // Add relative path to CIs
   judg_link = judg_link.map(function(e) {return githubCIs + e});
+  // randomize order
+  judg_link = _.shuffle(judg_link);
 
   // CIs stims
   CIsStims = judg_link.map(function(e) {return {imgHtml: "<img class='imgJudge' src='" + e + "'>"}});
