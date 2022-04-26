@@ -404,20 +404,20 @@ var End_part1 = {
     };
 
     var two_terrorist = {
-        type: "html-button-response",
-        post_trial_gap: 300,
-        choices: ["<img class='imgJudge' src='" + ci_avg_Att.jpeg + "'>", "<img class='imgJudge' src='" + ci_avg_JO.jpeg + "'>"],
-        stimulus: function () {
-            var html = "";
-            html += "<p class = 'justify'> A votre avis, laquelle de ces deux personnes est un terroriste ? (cliquez directement sur l'image)</p>";
-            return html;
+      type: 'survey-multi-choice',
+      questions: [{prompt: "A votre avis, laquelle de ces deux personnes est un terroriste ? (cocher la case en dessous de l'image correspondante)", options: ["<img class='imgJudge' src='" + judg_link[0] + "'><br>", "<img class='imgJudge' src='" + judg_link[1] + "'><br>"], required: true, horizontal: true}],
+      button_label: "Continuer",
+      on_load: function() {
+          window.scrollTo(0, 0);
+          $(".jspsych-content").css("margin-top", "200px");
+          $(".jspsych-content").css("max-width", "90%");
         },
-        on_finish: function (data) {
-            jsPsych.data.addProperties({
-                choice_terrorist: JSON.parse(data.responses),
-            });
-        },
-    };
+      on_finish: function(data) {
+          jsPsych.data.addProperties({
+              two_terrorist: JSON.parse(data.responses)["Q0"],
+          });
+      },
+  };
 
   var demand_awareness = {
         timeline: [{
@@ -536,6 +536,7 @@ preloadimages = _.flattenDeep(preloadimages);
   debrief += "Vous pouvez copier ce code pour valider votre participation : <b>1C606110</b></p>";
 
   // TIMELINE ----------------------------------------------------------------------------------------------------------
+
   timeline.push(consent);
   timeline.push(activeFullscreen);
   timeline.push(instr_gene);
