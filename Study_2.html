@@ -338,7 +338,7 @@ var End_part1 = {
             var html = "";
             html += "<h1>Partie 2: Tâche de reconnaissance de visages</h1>";
             html += "<p class = 'justify'>A chaque essai, votre tâche sera de choisir, parmi les 12 visages, celui qui ressemble le plus à ";
-            html += "<b>un terroriste susceptible de perpétrer des attentats en France, autrement dit le visage qui vous semble le plus typiquement terroriste. </b><br>";
+            html += "<b>un terroriste islamiste (ou djihadiste) susceptible de perpétrer des attentats en France, autrement dit le visage qui vous semble le plus typiquement terroriste. </b><br>";
             html += "<p class = 'justify'>Merci d'utiliser votre souris d'ordinateur pour sélectionner un visage.</p>";
             html += "<img width='200' style='padding: 0px' src='" + imgLink(474, 'ori') + "'>";
             return html;
@@ -379,7 +379,7 @@ var End_part1 = {
             type: 'html-mouse-response',
             stimulus: function () {
                 html = "";
-                html += "<p>Veuillez sélectionner le visage qui vous semble le plus <b>terroriste</b> </br></br>";
+                html += "<p>Veuillez sélectionner le visage qui vous semble le plus proche physiquement d'un <b>terroriste islamiste</b> </br></br>";
                 jsPsych.timelineVariable('trialImgs', true).map(function (e) {
                     html += "<img class='rcimg-12' src='" + e + "'>";
                 });
@@ -397,6 +397,18 @@ var End_part1 = {
         stimulus: function () {
             var html = "";
             html += "<p class = 'justify'>La tâche de reconnaissance de visages (Partie 2) est terminée. Vous allez maintenant répondre à quelques questions.</br></p>";
+            return html;
+        },
+    };
+
+    var two_terrorist = {
+        type: "html-button-response",
+        post_trial_gap: 300,
+        choices: [ciImg[0], ciImg[1]],
+        stimulus: function () {
+            var html = "";
+            html += "<p class = 'justify'> A votre avis, laquelle de ces deux personnes est un terroriste ?</p>";
+            html += "<img width='200' style='padding: 0px' src='" + imgLink(474, 'ori') + "'>";
             return html;
         },
     };
