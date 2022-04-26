@@ -533,7 +533,8 @@ var End_part1 = {
     fullscreen_mode: false
   };
 
-  preloadcis = _.flattenDeep(preloadcis);
+  //preloadcis = _.flattenDeep(preloadcis);
+  preloadcis = flatten(preloadcis);
 
   /* DEBRIEF */
   var debrief = [];
@@ -545,14 +546,14 @@ var End_part1 = {
   debrief += "<a href='https://app.prolific.co/submissions/complete?cc=1C606110' target='_blank'>cliquez ici</a>";
 
   // TIMELINE ----------------------------------------------------------------------------------------------------------
-  timeline.push(consent);
-  timeline.push(Quit_expe);
+  //timeline.push(consent);
+  //timeline.push(Quit_expe);
   timeline.push(activeFullscreen);
-  timeline.push(instr_gene);
-  timeline.push(previewCIinst);
-  timeline.push(previewCI);
-  timeline.push(jugmentInst);
-  timeline.push(judgments);
+  //timeline.push(instr_gene);
+  //timeline.push(previewCIinst);
+  //timeline.push(previewCI);
+  //timeline.push(jugmentInst);
+  //timeline.push(judgments);
   timeline.push(End_part1);
   timeline.push(RCinst1);
   timeline.push(RCinst2);
@@ -572,9 +573,9 @@ var End_part1 = {
 
   // INITIALISE EXP ----------------------------------------------------------------------------------------------------
   jsPsych.init({
-    timeline: timeline,
-    preload_images: preloadimages,
+    timeline: _.flattenDeep(timeline),
     preload_cis: preloadcis,
+    preload_images: preloadimages,
     max_load_time: 500*1000,
     exclusions: {
       min_width: 700,
