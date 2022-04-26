@@ -410,6 +410,11 @@ var End_part1 = {
             html += "<p class = 'justify'> A votre avis, laquelle de ces deux personnes est un terroriste ? (cliquez directement sur l'image)</p>";
             return html;
         },
+        on_finish: function (data) {
+            jsPsych.data.addProperties({
+                choice_terrorist: JSON.parse(data.responses).Q0,
+            });
+        },
     };
 
   var demand_awareness = {
