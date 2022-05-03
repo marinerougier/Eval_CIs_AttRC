@@ -187,12 +187,8 @@ var judg_link = [
       var html = "";
       html += "<h1>Avant de commencer...</h1>";
       html += "<p class='justify'>Vous pouvez arrêter l'étude à tout moment en fermant cette fenêtre. Sachez, cependant, que ";
-      html += "cela <b>arrêtera votre participation</b>. Si vous êtes certain.e que vous voulez arrêter l'étude ou si vous rencontrez des problèmes techniques ";
-      html += "qui vous forcent à arrêter l'étude, <b>vous pouvez toujours recevoir une rétribution partielle et proportionnelle au temps que vous avez passé sur l'étude</b>. ";
-      html += "Si cela se produit, merci de suivre la procédure suivante : Retournez sur la page Prolific de l'étude aussi rapidement ";
-      html += "que possible (ne soumettez pas l'étude sauf si vous l'avez complétée entièrement et avez reçu le code de complétion). ";
-      html += "Envoyez un message au chercheur responsable sur Prolific en indiquant que vous avez complété une partie de l'étude ";
-      html += "(ceci permettra au chercheur de savoir que vous avez droit à une rétribution partielle). </br></br> ";
+      html += "cela <b>arrêtera votre participation</b>.<br><br> ";
+      html += "Pour valider votre participation, vous devrez absolument envoyer un mail (à la fin de l'étude) à <b>aurelien.geelhand@student.uclouvain.be</b> en indiquant votre NOM, PRENOM, Numéro d'étudiant. </br></br> Attention ! Si vous n'envoyez pas de mail, nous ne pourrons pas valider votre participation à notre étude. Nous vous indiquerons ces informations à nouveau à la fin de l'étude. </p></br></br> ";
       return html;
     },
   };
@@ -533,10 +529,11 @@ preloadimages = _.flattenDeep(preloadimages);
   debrief += "<h1>Fin de l'étude</h1>";
   debrief += "<p class='justify'>Merci pour votre participation ! Le but de cette étude était d'investiguer la perception ";
   debrief += "de visages inconnus et ambigus qui proviennent d'une expérience précédente.</br></br> "
-  debrief += "Pour valider votre participation, merci de suivre la procédure suivante: </br></br> 1) Copiez ce code de participation : <b>1C606110</b> </br></br> 2) Envoyez ce code par mail à <b>aurelien.geelhand@student.uclouvain.be</b> en indiquant votre NOM, PRENOM, Numéro d'étudiant. </br></br> Attention ! Si vous ne suivez pas ces deux étapes, nous ne pourrons pas valider votre participation à notre étude.</p>";
+  debrief += "Pour valider votre participation, n'oubliez pas d'envoyer un mail à <b>aurelien.geelhand@student.uclouvain.be</b> en indiquant votre NOM, PRENOM, Numéro d'étudiant. </br></br> Attention ! Si vous n'envoyez pas de mail, nous ne pourrons pas valider votre participation à notre étude.</p>";
 
   // TIMELINE ----------------------------------------------------------------------------------------------------------
   timeline.push(consent);
+  timeline.push(Quit_expe);
   timeline.push(activeFullscreen);
   timeline.push(instr_gene);
   timeline.push(previewCIinst);
